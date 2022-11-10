@@ -86,21 +86,21 @@ int main()
     
     functions stack;
 
-    //stack.add(90);
-    //stack.add(50);
-    //stack.add(500);
-    //stack.add(50);
-    //stack.add(5);
+    stack.add(90);
+    stack.add(50);
+    stack.add(500);
+    stack.add(50);
+    stack.add(5);
 
     stack.Print();
 
-  /*  stack.pop();
+    stack.pop();
 
     stack.Print();
 
     stack.top();
 
-    stack.size();*/
+    stack.size();
 
 
 }
