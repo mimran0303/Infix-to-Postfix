@@ -55,12 +55,6 @@ public:
             //cout << "Size " << stack.size() << endl;;
         return stack.size();
     }
-
-    int empty()
-    {
-        
-        return stack.empty();
-    }
     
     void Print()
     {
@@ -84,6 +78,8 @@ public:
 //------------
 //expressions
 //------------
+
+
     int prec(char c)
     {
         if (c == '^')
@@ -106,18 +102,18 @@ public:
         {
             char c = expressions[i];
 
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-                || (c >= '0' && c <= '9'))
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) //if operand we add to the output string
             {
                 PostFix += c;
             }
 
-            else if (c == '(')
+            else if (c == '(') // if '(' add to the stack
             {
                 stack.add('(');
             }
 
-            else if (c == ')') {
+            else if (c == ')') // if ')' add to the stack, but if there is '(' then they cancel and any character between '(' and ')' will be moved to output string
+            {
                 while (stack.top() != '(') {
                     PostFix += stack.top();
                     stack.pop();
@@ -127,7 +123,8 @@ public:
 
             else
             {
-                while (!stack.size() == 0 && prec(expressions[i]) <= prec(stack.top())) {
+                while (!stack.size() == 0 && prec(expressions[i]) <= prec(stack.top())) //adding charcaters from stack to postfix
+                {
                     PostFix += stack.top();
                     stack.pop();
                 }
@@ -135,7 +132,7 @@ public:
             }
         }
 
-        while (!stack.size() == 0)
+        while (!stack.size() == 0) //adding from stack to postfix
         {
             PostFix += stack.top();
             stack.pop();
@@ -146,7 +143,11 @@ public:
 
     }
     
+//------------
+//evaluation
+//------------
   
+
 
 int main()
 {
