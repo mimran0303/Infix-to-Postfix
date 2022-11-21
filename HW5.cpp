@@ -1,8 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include<fstream>
 
 using namespace std;
+
+ofstream fileWrite;
 
 bool logging = true;
 
@@ -80,7 +83,7 @@ public:
 //------------
 
 
-    int prec(char c)
+    int priority(char c)
     {
         if (c == '^')
             return 3;
@@ -100,19 +103,19 @@ public:
 
         for (int i = 0; i < expressions.size(); i++)
         {
-            char c = expressions[i];
+            char e = expressions[i];
 
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) //if operand we add to the output string
+            if ((e >= 'a' && e <= 'z') || (e >= 'A' && e <= 'Z') || (e >= '0' && e <= '9')) //if operand we add to the output string
             {
-                PostFix += c;
+                PostFix += e;
             }
 
-            else if (c == '(') // if '(' add to the stack
+            else if (e == '(') // if '(' add to the stack
             {
                 stack.add('(');
             }
 
-            else if (c == ')') // if ')' add to the stack, but if there is '(' then they cancel and any character between '(' and ')' will be moved to output string
+            else if (e == ')') // if ')' add to the stack, but if there is '(' then they cancel and any character between '(' and ')' will be moved to output string
             {
                 while (stack.top() != '(') {
                     PostFix += stack.top();
@@ -123,16 +126,16 @@ public:
 
             else
             {
-                while (!stack.size() == 0 && prec(expressions[i]) <= prec(stack.top())) //adding charcaters from stack to postfix
+                while (stack.size() != 0 && priority(expressions[i]) <= priority(stack.top())) //adding charcaters from stack to postfix
                 {
                     PostFix += stack.top();
                     stack.pop();
                 }
-                stack.add(c);
+                stack.add(e);
             }
         }
 
-        while (!stack.size() == 0) //adding from stack to postfix
+        while (stack.size() != 0) //adding from stack to postfix
         {
             PostFix += stack.top();
             stack.pop();
@@ -147,15 +150,70 @@ public:
 //evaluation
 //------------
   
+    int Evaluate(string evaluation)
+    {
+        functions stack;
 
+        for (int i = 0; i < evaluation.size(); i++) //goes through string of operands and characters
+        {
+            char e = evaluation[i];
 
-int main()
-{
+            if (e >= '0' && e <= '9')
+            {
+                stack.add(e - '0');
+            }
 
-    string exp = "K+L-M*N+(O^P)*W/U/V*T+Q";
-    cout << "infix expression: " << exp << endl;
-    cout<<"postfix expression: ";
-    infixToPostfix(exp);
+            else
+            {
+                // removes top two elements from stack
+
+                int first = stack.top(); 
+                stack.pop();
+
+                int second = stack.top();
+                stack.pop();
+
+                // evaluates expressions and results are pushed back to the stack
+
+                if (e == '+')                                                   
+                {
+                    stack.add(second + first);
+                }
+                else if (e == '-')
+                {
+                    stack.add(second - first);
+                }
+                else if (e == '*')
+                {
+                    stack.add(second * first);
+                }
+                else if (e == '/')
+                {
+                    stack.add(second / first);
+                }
+            }
+        }
+
+        return stack.top();
+    }
+
+//int main()
+//{
+//
+//    string exp = "K+L-M*N+(O^P)*W/U/V*t+q";
+//    string eval = "138*+";
+//
+//    cout << "infix expression: " << endl;
+//    cout<<exp << endl;
+//    cout << endl;
+//
+//    cout << "postfix expression: " << endl;
+//    infixToPostfix(exp);
+//    cout << endl;
+//
+//    cout << "TEST EVLUATION FUNCTION:" << endl;
+//    cout << "ORIGINAL POSTFIX EXPRESSION: " << eval << endl;
+//    cout<< "RESULT: " << Evaluate(eval)<<endl;
 
     /*functions stack;
 
@@ -177,4 +235,28 @@ int main()
     stack.pop();
     stack.pop();
     stack.Print();*/
-}
+//}
+
+    int main(int argc, char** argv)
+    {
+        char* programme = argv[0];
+        char* Part = argv[1];
+        string String = argv[2];
+        char* File = argv[3];
+
+        fileWrite.open(File);
+
+        int part = atoi(Part);
+
+        if (part == 2)
+        {
+            infixToPostfix(String);
+        }
+        else if (part == 3)
+        {
+            cout << Evaluate(String) << ".0" << endl;
+
+        }
+
+        fileWrite.close();
+    }
