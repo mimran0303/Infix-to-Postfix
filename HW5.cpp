@@ -38,7 +38,7 @@ public:
         return i;
     }
 
-    int top() //working
+    int top() //finding top most element
     {
         if (stack.size() == 0)
         {
@@ -49,32 +49,16 @@ public:
         return i;
     }
 
-    int size()    
+    int size() //number of elements
     {
         return stack.size();
     }
     
-    void Print()
-    {
-        cout << "Print: " << endl;
-        if (stack.size() == 0)
-        {
-            return;
-        }
-
-        for (int i = stack.size() - 1; i >= 0; i--)
-        {
-            int value = stack.at(i);
-        }
-    }
 };
-
-
 
 //------------
 //expressions
 //------------
-
 
     int priority(char c)
     {
@@ -141,7 +125,7 @@ public:
     
 //----------------
 //evaluation
-//-----------------
+//----------------
   
     int Evaluate(string evaluation)
     {
@@ -149,44 +133,48 @@ public:
 
         for (int i = 0; i < evaluation.size(); i++) //goes through string of operands and characters
         {
-            char e = evaluation[i];
+            char character = evaluation[i];
 
-            if (e >= '0' && e <= '9')
+            if (character >= '0' && character <= '9')
             {
-                stack.add(e - '0');
+                stack.add(character - '0');
             }
-
             else
             {
-                // removes top two elements from stack
+                // top two numbers from stack are popped and we then perform operations
 
-                int first = stack.top(); 
+                int first = stack.top();
                 stack.pop();
 
                 int second = stack.top();
                 stack.pop();
 
-                // evaluates expressions and results are pushed back to the stack
+                //performing operation on top two numbers 
 
-                if (e == '+')                                                   
+                if (character == '+')
                 {
                     stack.add(second + first);
                 }
-                else if (e == '-')
+                else if (character == '-')
                 {
                     stack.add(second - first);
                 }
-                else if (e == '*')
+                else if (character == '*')
                 {
                     stack.add(second * first);
                 }
-                else if (e == '/')
+                else if (character == '/')
                 {
                     stack.add(second / first);
+                }
+                else if (character == '^')
+                {
+                    stack.add(pow(second, first));
                 }
             }
         }
 
+        //returning result
         return stack.top();
     }
 
