@@ -7,12 +7,13 @@ using namespace std;
 
 ofstream fileWrite;
 
-bool logging = true;
+//------------
+//class stack
+//------------
 
 class functions
 {
-    // https://www.programiz.com/cpp-programming/vectors 
-    //
+   
 private: vector<int> stack;
 
 public:
@@ -20,8 +21,7 @@ public:
     void add(int e) //use pushback in here
     {
         stack.push_back(e);
-       // if (logging == true)
-           // cout << "Added " << e << endl;
+       
     }
 
     int pop() // use popback here to return top element
@@ -33,8 +33,7 @@ public:
 
         int i = stack.at(stack.size() - 1);
         stack.pop_back();
-        //if (logging == true)
-            //cout << "Popped " << i << endl;
+       
 
         return i;
     }
@@ -47,15 +46,11 @@ public:
         }
 
         int i = stack.at(stack.size() - 1);
-       // if (logging == true)
-           // cout << "Top Value " << i << endl;;
         return i;
     }
 
     int size()    
     {
-        //if (logging == true)
-            //cout << "Size " << stack.size() << endl;;
         return stack.size();
     }
     
@@ -64,14 +59,12 @@ public:
         cout << "Print: " << endl;
         if (stack.size() == 0)
         {
-            //cout << "  Stack is Empty " << endl;
             return;
         }
 
         for (int i = stack.size() - 1; i >= 0; i--)
         {
             int value = stack.at(i);
-           // cout << "  " << value << endl;
         }
     }
 };
@@ -141,14 +134,14 @@ public:
             stack.pop();
         }
 
-        cout << PostFix << endl;
+        fileWrite << PostFix << endl;
 
 
     }
     
-//------------
+//----------------
 //evaluation
-//------------
+//-----------------
   
     int Evaluate(string evaluation)
     {
@@ -197,48 +190,9 @@ public:
         return stack.top();
     }
 
-//int main()
-//{
-//
-//    string exp = "K+L-M*N+(O^P)*W/U/V*t+q";
-//    string eval = "138*+";
-//
-//    cout << "infix expression: " << endl;
-//    cout<<exp << endl;
-//    cout << endl;
-//
-//    cout << "postfix expression: " << endl;
-//    infixToPostfix(exp);
-//    cout << endl;
-//
-//    cout << "TEST EVLUATION FUNCTION:" << endl;
-//    cout << "ORIGINAL POSTFIX EXPRESSION: " << eval << endl;
-//    cout<< "RESULT: " << Evaluate(eval)<<endl;
-
-    /*functions stack;
-
-    stack.Print();
-
-    stack.add(90);
-    stack.add(50);
-    stack.add(500);
-    stack.add(50);
-    stack.add(5);
-    stack.Print();
-
-    stack.pop();
-    stack.Print();
-
-    stack.top();
-    stack.size();
-
-    stack.pop();
-    stack.pop();
-    stack.Print();*/
-//}
-
     int main(int argc, char** argv)
     {
+     
         char* programme = argv[0];
         char* Part = argv[1];
         string String = argv[2];
@@ -254,8 +208,7 @@ public:
         }
         else if (part == 3)
         {
-            cout << Evaluate(String) << ".0" << endl;
-
+             fileWrite<< Evaluate(String) << ".0" << endl;
         }
 
         fileWrite.close();
