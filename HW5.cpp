@@ -78,7 +78,6 @@ public:
         functions stack; 
         string PostFix; 
 
-
         for (int i = 0; i < expressions.size(); i++)
         {
 
@@ -142,16 +141,13 @@ public:
                 {
                     return INT_MIN;
                 }
-                int first = stack.top();
-                stack.pop();
+                int first = stack.pop();
 
                 if (stack.size() == 0)
                 {
                     return INT_MIN;
                 }
-
-                int second = stack.top();
-                stack.pop();
+                int second = stack.pop();
 
                 //performing operation on top two numbers 
 
@@ -174,11 +170,18 @@ public:
                 else if (evaluation[i] == '^')
                 {
                     stack.add(pow(second, first));
-                }               
-            }              
+                }                        
+            }  
         }
 
-        return stack.top();
+        int result = stack.pop();
+
+        if (stack.size() != 0)
+        {
+            return INT_MIN;
+        }
+
+        return result;
     }
 
     int main(int argc, char** argv)
@@ -200,6 +203,8 @@ public:
         else if (part == 3)
         {
             int result = Evaluate(String);
+            // cout << "Input: " << String << endl; // TODO: Remove before submit
+            // cout << "Output: " << result << endl; // TODO: Remove before submit
             if (result != INT_MIN)
             {
                 fileWrite << Evaluate(String) << ".0" << endl;
