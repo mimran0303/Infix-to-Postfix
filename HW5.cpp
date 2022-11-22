@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
+#include <string>   
 #include<fstream>
 
 using namespace std;
@@ -74,25 +75,24 @@ public:
 
     void infixToPostfix(string expressions)
     {
-        functions stack; //where all characters are added
-        string PostFix; //where all operands are added
+        functions stack; 
+        string PostFix; 
 
 
         for (int i = 0; i < expressions.size(); i++)
         {
-            char e = expressions[i];
 
-            if ((e >= 'a' && e <= 'z') || (e >= 'A' && e <= 'Z') || (e >= '0' && e <= '9')) //if operand we add to the output string
+            if ((expressions[i] >= 'a' && expressions[i] <= 'z') || (expressions[i] >= 'A' && expressions[i] <= 'Z') || (expressions[i] >= '0' && expressions[i] <= '9')) //if operand we add to the output string
             {
-                PostFix += e;
+                PostFix += expressions[i];
             }
 
-            else if (e == '(') // if '(' add to the stack
+            else if (expressions[i] == '(') // if '(' add to the stack
             {
                 stack.add('(');
             }
 
-            else if (e == ')') // if ')' add to the stack, but if there is '(' then they cancel and any character between '(' and ')' will be moved to output string
+            else if (expressions[i] == ')') // if ')' add to the stack, but if there is '(' then they cancel and any character between '(' and ')' will be moved to output string
             {
                 while (stack.top() != '(') {
                     PostFix += stack.top();
@@ -108,7 +108,7 @@ public:
                     PostFix += stack.top();
                     stack.pop();
                 }
-                stack.add(e);
+                stack.add(expressions[i]);
             }
         }
 
@@ -119,8 +119,6 @@ public:
         }
 
         fileWrite << PostFix << endl;
-
-
     }
     
 //----------------
@@ -133,48 +131,53 @@ public:
 
         for (int i = 0; i < evaluation.size(); i++) //goes through string of operands and characters
         {
-            char character = evaluation[i];
-
-            if (character >= '0' && character <= '9')
+            if (evaluation[i] >= '0' && evaluation[i] <= '9') //checks if postfix expressions is correct
             {
-                stack.add(character - '0');
+                stack.add(evaluation[i] - '0');
             }
             else
             {
                 // top two numbers from stack are popped and we then perform operations
-
+                if (stack.size() == 0)
+                {
+                    return INT_MIN;
+                }
                 int first = stack.top();
                 stack.pop();
+
+                if (stack.size() == 0)
+                {
+                    return INT_MIN;
+                }
 
                 int second = stack.top();
                 stack.pop();
 
                 //performing operation on top two numbers 
 
-                if (character == '+')
+                if (evaluation[i] == '+')
                 {
                     stack.add(second + first);
                 }
-                else if (character == '-')
+                else if (evaluation[i] == '-')
                 {
                     stack.add(second - first);
                 }
-                else if (character == '*')
+                else if (evaluation[i] == '*')
                 {
                     stack.add(second * first);
                 }
-                else if (character == '/')
+                else if (evaluation[i] == '/')
                 {
                     stack.add(second / first);
                 }
-                else if (character == '^')
+                else if (evaluation[i] == '^')
                 {
                     stack.add(pow(second, first));
-                }
-            }
+                }               
+            }              
         }
 
-        //returning result
         return stack.top();
     }
 
@@ -196,7 +199,16 @@ public:
         }
         else if (part == 3)
         {
-             fileWrite<< Evaluate(String) << ".0" << endl;
+            int result = Evaluate(String);
+            if (result != INT_MIN)
+            {
+                fileWrite << Evaluate(String) << ".0" << endl;
+            }
+            else if (result == INT_MIN)
+            {
+                
+                fileWrite << "nv" << endl;
+            }
         }
 
         fileWrite.close();
