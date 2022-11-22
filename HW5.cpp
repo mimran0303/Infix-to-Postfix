@@ -6,8 +6,6 @@
 
 using namespace std;
 
-ofstream fileWrite;
-
 //------------
 //class stack
 //------------
@@ -73,7 +71,7 @@ public:
             return -1;
     }
 
-    void infixToPostfix(string expressions)
+    string infixToPostfix(string expressions)
     {
         functions stack; 
         string PostFix; 
@@ -81,7 +79,7 @@ public:
         for (int i = 0; i < expressions.size(); i++)
         {
 
-            if ((expressions[i] >= 'a' && expressions[i] <= 'z') || (expressions[i] >= 'A' && expressions[i] <= 'Z') || (expressions[i] >= '0' && expressions[i] <= '9')) //if operand we add to the output string
+            if (expressions[i] >= '0' && expressions[i] <= '9') //if operand we add to the output string
             {
                 PostFix += expressions[i];
             }
@@ -117,7 +115,7 @@ public:
             stack.pop();
         }
 
-        fileWrite << PostFix << endl;
+        return PostFix;
     }
     
 //----------------
@@ -192,19 +190,20 @@ public:
         string String = argv[2];
         char* File = argv[3];
 
-        fileWrite.open(File);
-
         int part = atoi(Part);
+
+        ofstream fileWrite;
+        fileWrite.open(File);
 
         if (part == 2)
         {
-            infixToPostfix(String);
+            string postfix = infixToPostfix(String);
+            fileWrite << postfix << endl;
         }
+
         else if (part == 3)
         {
             int result = Evaluate(String);
-            // cout << "Input: " << String << endl; // TODO: Remove before submit
-            // cout << "Output: " << result << endl; // TODO: Remove before submit
             if (result != INT_MIN)
             {
                 fileWrite << Evaluate(String) << ".0" << endl;
@@ -217,4 +216,17 @@ public:
         }
 
         fileWrite.close();
+        return 0;
     }
+
+    int mainTest(int argc, char** argv)
+    {
+        string input = "((4+2)*(2+6*(6-4)))/2";
+        string postfix = infixToPostfix(input);
+        int result = Evaluate(postfix);
+        cout << "Input: " << input << endl;
+        cout << "Postfix: " << postfix << endl;
+        cout << "Output: " << result << endl;
+        return 0;
+    }
+
